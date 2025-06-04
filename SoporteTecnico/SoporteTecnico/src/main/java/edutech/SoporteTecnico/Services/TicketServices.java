@@ -59,28 +59,36 @@ public class TicketServices {
     }
 
     public String usuarioTicket(String run) {
-        String estudianteURL = "http://localhost:8082/api/v1/estudiantes/EstudianteDTO/" + run;
-        String estudianteData = restTemplate.getForObject(estudianteURL, String.class);
-        List<Ticket> tickets = ticketRepository.findAllByRun(run);
+        try {
+            String estudianteURL = "http://localhost:8082/api/v1/estudiantes/EstudianteDTO/" + run;
+            String estudianteData = restTemplate.getForObject(estudianteURL, String.class);
+            List<Ticket> tickets = ticketRepository.findAllByRun(run);
 
-        if (estudianteData == null) {
-            return "El estudiante no existe.";
-        } else {
-            StringBuilder resultado = new StringBuilder();
-            resultado.append("=== INFORMACIÓN DEL ESTUDIANTE ===\n");
-            resultado.append(estudianteData).append("\n\n");
-            resultado.append("=== TICKETS DEL ESTUDIANTE ===\n");
+            if (estudianteData == null) {
+                return "El estudiante no existe.";
+            } else {
+                StringBuilder resultado = new StringBuilder();
+                resultado.append("=== INFORMACIÓN DEL ESTUDIANTE ===\n");
+                resultado.append(estudianteData).append("\n\n");
+                resultado.append("=== TICKETS DEL ESTUDIANTE ===\n");
 
-        for (Ticket t : tickets) {
-            resultado.append("\n- Ticket ID: ").append(t.getId_ticket())
-                    .append("\n  Título: ").append(t.getTitulo())
-                    .append("\n  Mensaje: ").append(t.getMensaje())
-                    .append("\n  Estado: ").append(t.getEstado())
-                    .append("\n  Categoría: ").append(t.getCategoria())
-                    .append("\n  Fecha: ").append(t.getFecha_creacion()).append("\n");
-        }
-        
-        return resultado.toString();
+                if(tickets.isEmpty()) {
+                    resultado.append("\nEl estudiante no tiene tickets registrados.");
+                } else {
+                    for (Ticket t : tickets) {
+                        resultado.append("\n- Ticket ID: ").append(t.getId_ticket())
+                                .append("\n  Título: ").append(t.getTitulo())
+                                .append("\n  Mensaje: ").append(t.getMensaje())
+                                .append("\n  Estado: ").append(t.getEstado())
+                                .append("\n  Categoría: ").append(t.getCategoria())
+                                .append("\n  Fecha: ").append(t.getFecha_creacion()).append("\n");
+                    }
+                }
+
+                return resultado.toString();
+            }
+        } catch (Exception e) {
+            return "Error al obtener la información del estudiante: " + run;
         }
     }
 }
