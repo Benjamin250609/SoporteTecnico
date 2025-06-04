@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import edutech.SoporteTecnico.Model.Ticket;
 import edutech.SoporteTecnico.Repository.TicketRepository;
@@ -31,6 +32,7 @@ public class ComentarioServices {
 
 public Comentario save(Comentario comentario) {
     Integer ticketId = comentario.getTicket().getId_ticket();
+    comentario.setFecha(LocalDateTime.now());
     if (ticketId == null) {
         throw new RuntimeException("El ID del ticket no puede ser nulo");
     }

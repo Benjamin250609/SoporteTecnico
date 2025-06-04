@@ -30,6 +30,11 @@ public class TicketController {
         return ResponseEntity.ok(ticketServices.findById(id));
     }
 
+    @GetMapping("/usuario/{run}")
+    public ResponseEntity<String> usuarioTicket(@PathVariable String run) {
+        return ResponseEntity.ok(ticketServices.usuarioTicket(run));
+    }
+
 
     @PostMapping("/crear")
     public ResponseEntity<Ticket> save(@RequestBody Ticket ticket) {

@@ -38,15 +38,10 @@ public class TicketServices {
 
         Categoria categoria = categoriaRepository.findCategoriaById(ticket.getCategoria().getId_categoria());
         ticket.setCategoria(categoria);
-
-
         ticket.setFecha_creacion(LocalDateTime.now());
         ticket.setEstado("En espera");
         return ticketRepository.save(ticket);
-
-
     }
-
 
     public void delete(Integer id) {
         ticketRepository.deleteById(id);
@@ -55,7 +50,6 @@ public class TicketServices {
     public Ticket update(Integer id_ticket, Ticket ticket) {
         Ticket ticketUpdate = ticketRepository.findById(id_ticket)
                 .orElseThrow(() -> new RuntimeException("Ticket no encontrado"));
-
         ticketUpdate.setTitulo(ticket.getTitulo());
         ticketUpdate.setMensaje(ticket.getMensaje());
         ticketUpdate.setEstado(ticket.getEstado());
@@ -65,7 +59,7 @@ public class TicketServices {
     }
 
     public String usuarioTicket(String run) {
-        String estudianteURL = "http://localhost:8081/api/v1/estudiantes/EstudianteDTO/" + run;
+        String estudianteURL = "http://localhost:8082/api/v1/estudiantes/EstudianteDTO/" + run;
         String estudianteData = restTemplate.getForObject(estudianteURL, String.class);
         List<Ticket> tickets = ticketRepository.findAllByRun(run);
 
